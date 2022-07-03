@@ -1,15 +1,35 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const app = (0, express_1.default)();
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import passport from "passport";
+import { googleStrategy } from "./google/google.auth.js";
+import signInWithGoogleController from "./google/controller.js";
+import pino from "pino";
+const app = express();
 const port = 3000;
-app.get('/', (req, res) => {
-    res.send('Hello World!');
+const logger = pino({
+    mixin() {
+        return { requestId: "1" };
+    },
+});
+// bodyparse to parse req.body
+app.use(express.json());
+// Healthcheck endpoint
+app.get("/", (req, res) => {
+    res.send("Server is up and running!");
 });
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
+});
+app.use(passport.initialize());
+passport.use(googleStrategy);
+app.use("/oauth/google", signInWithGoogleController);
+app.use((err, req, res, next) => {
+    if (err)
+        logger.error(err);
+    res.status(500).json({
+        status: "error",
+        message: "something went wrong",
+    });
 });
 //# sourceMappingURL=app.js.map

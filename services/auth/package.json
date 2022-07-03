@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "start": "tsc && node dist/app.js",
+    "start": "tsc && nodemon dist/app.js",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
@@ -17,6 +17,13 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
-    "express": "^4.17.1"
-  }
+    "axios": "^0.27.2",
+    "dotenv": "^16.0.1",
+    "express": "^4.17.1",
+    "google-auth-library": "^8.1.0",
+    "passport": "^0.6.0",
+    "passport-google-oauth": "^2.0.0",
+    "pino": "^8.1.0"
+  },
+  "type": "module"
 }
